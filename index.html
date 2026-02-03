@@ -24,32 +24,80 @@
       </header>
 
       <section class="board-card">
+        <div class="scorebar">
+          <div class="score-item">
+            <span class="token x">X</span>
+            <span class="label">Aladdin</span>
+            <span class="score" id="scoreX">0</span>
+          </div>
+          <div class="score-item center">
+            <span class="label">Draws</span>
+            <span class="score" id="scoreDraw">0</span>
+          </div>
+          <div class="score-item">
+            <span class="token o">O</span>
+            <span class="label" id="opponentLabel">Genie</span>
+            <span class="score" id="scoreO">0</span>
+          </div>
+          <div class="round-tag" id="roundTag">Round 1</div>
+        </div>
+
         <div class="status" id="status">Player X begins</div>
 
-        <div class="board" id="board" aria-label="Tic tac toe board" role="grid">
-          <button class="cell" data-index="0" aria-label="Cell 1"></button>
-          <button class="cell" data-index="1" aria-label="Cell 2"></button>
-          <button class="cell" data-index="2" aria-label="Cell 3"></button>
-          <button class="cell" data-index="3" aria-label="Cell 4"></button>
-          <button class="cell" data-index="4" aria-label="Cell 5"></button>
-          <button class="cell" data-index="5" aria-label="Cell 6"></button>
-          <button class="cell" data-index="6" aria-label="Cell 7"></button>
-          <button class="cell" data-index="7" aria-label="Cell 8"></button>
-          <button class="cell" data-index="8" aria-label="Cell 9"></button>
+        <div class="board-wrap">
+          <div class="board" id="board" aria-label="Tic tac toe board" role="grid">
+            <button class="cell" data-index="0" aria-label="Cell 1"></button>
+            <button class="cell" data-index="1" aria-label="Cell 2"></button>
+            <button class="cell" data-index="2" aria-label="Cell 3"></button>
+            <button class="cell" data-index="3" aria-label="Cell 4"></button>
+            <button class="cell" data-index="4" aria-label="Cell 5"></button>
+            <button class="cell" data-index="5" aria-label="Cell 6"></button>
+            <button class="cell" data-index="6" aria-label="Cell 7"></button>
+            <button class="cell" data-index="7" aria-label="Cell 8"></button>
+            <button class="cell" data-index="8" aria-label="Cell 9"></button>
+          </div>
+
+          <div class="overlay" id="roundOverlay" aria-hidden="true">
+            <div class="overlay-card">
+              <p class="overlay-eyebrow" id="roundResult">Round Complete</p>
+              <h3 id="roundMessage">Aladdin wins the round!</h3>
+              <div class="overlay-actions">
+                <button id="nextRound">Next Round</button>
+                <button class="ghost" id="pauseAuto">Pause Auto</button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="panel">
           <div class="legend">
             <div><span class="symbol symbol-x" aria-hidden="true"></span>Aladdin</div>
-            <div><span class="symbol symbol-o" aria-hidden="true"></span>Genie</div>
+            <div><span class="symbol symbol-o" aria-hidden="true"></span><span id="legendOpponent">Genie</span></div>
           </div>
           <div class="actions">
-            <label class="toggle">
-              <input type="checkbox" id="mode" />
-              <span class="track"></span>
-              Vs Genie (CPU)
+            <button id="restartRound">Restart Round</button>
+            <button class="ghost" id="resetMatch">Reset Match</button>
+            <button class="ghost" id="endMatch">End Match</button>
+          </div>
+          <div class="settings">
+            <div class="mode-pill" id="modeLabel">Mode: Vs Genie (CPU)</div>
+            <label class="select">
+              <span>CPU Difficulty</span>
+              <select id="cpuDifficulty">
+                <option value="easy">Easy</option>
+                <option value="smart" selected>Smart</option>
+              </select>
             </label>
-            <button id="reset">New Round</button>
+            <label class="toggle small">
+              <input type="checkbox" id="musicToggle" />
+              <span class="track"></span>
+              Music
+            </label>
+            <label class="toggle small">
+              <input type="checkbox" id="sfxToggle" checked />
+              <span class="track"></span>
+              SFX
+            </label>
           </div>
         </div>
       </section>
@@ -59,6 +107,51 @@
         <p>Aladdin (crossed blades) goes first. Line up three symbols to win. If the board fills with no winner, the desert winds call a draw.</p>
       </section>
     </main>
+
+    <div class="screen start-screen" id="startScreen" aria-modal="true" role="dialog">
+      <div class="screen-card">
+        <div class="hero-badge">Match Portal</div>
+        <h2>Choose Your Match</h2>
+        <p>Pick a mode to begin your continuous showdown. You can switch modes only after a match ends.</p>
+        <div class="screen-actions">
+          <button class="primary" data-mode="cpu">Vs Genie (CPU)</button>
+          <button class="ghost" data-mode="pvp">2 Players</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen summary-screen" id="summaryScreen" aria-modal="true" role="dialog" hidden>
+      <div class="screen-card">
+        <div class="hero-badge">Match Summary</div>
+        <h2 id="summaryTitle">Match Complete</h2>
+        <div class="summary-grid">
+          <div class="summary-stat">
+            <span class="label">Total Rounds</span>
+            <span class="value" id="summaryRounds">0</span>
+          </div>
+          <div class="summary-stat">
+            <span class="label">Aladdin (X)</span>
+            <span class="value" id="summaryX">0</span>
+          </div>
+          <div class="summary-stat">
+            <span class="label" id="summaryOpponentLabel">Genie (O)</span>
+            <span class="value" id="summaryO">0</span>
+          </div>
+          <div class="summary-stat">
+            <span class="label">Draws</span>
+            <span class="value" id="summaryDraws">0</span>
+          </div>
+        </div>
+        <div class="summary-history">
+          <h3>Round History</h3>
+          <ul id="historyList"></ul>
+        </div>
+        <div class="screen-actions">
+          <button class="primary" id="playAgain">Play Again (same mode)</button>
+          <button class="ghost" id="newMatch">New Match (choose mode)</button>
+        </div>
+      </div>
+    </div>
 
     <div class="lamp"></div>
     <script src="script.js"></script>
