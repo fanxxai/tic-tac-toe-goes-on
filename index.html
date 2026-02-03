@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aladdin Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Henny+Penny&family=Vollkorn:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="sky">
+      <div class="stars"></div>
+      <div class="stars s2"></div>
+      <div class="stars s3"></div>
+    </div>
+
+    <main class="page">
+      <header class="hero">
+        <div class="hero-badge">Agrabah Nights</div>
+        <h1>Aladdin Tic-Tac-Toe</h1>
+        <p class="subtitle">Choose your magic, claim the grid.</p>
+      </header>
+
+      <section class="board-card">
+        <div class="status" id="status">Player X begins</div>
+
+        <div class="board" id="board" aria-label="Tic tac toe board" role="grid">
+          <button class="cell" data-index="0" aria-label="Cell 1"></button>
+          <button class="cell" data-index="1" aria-label="Cell 2"></button>
+          <button class="cell" data-index="2" aria-label="Cell 3"></button>
+          <button class="cell" data-index="3" aria-label="Cell 4"></button>
+          <button class="cell" data-index="4" aria-label="Cell 5"></button>
+          <button class="cell" data-index="5" aria-label="Cell 6"></button>
+          <button class="cell" data-index="6" aria-label="Cell 7"></button>
+          <button class="cell" data-index="7" aria-label="Cell 8"></button>
+          <button class="cell" data-index="8" aria-label="Cell 9"></button>
+        </div>
+
+        <div class="panel">
+          <div class="legend">
+            <div><span class="token x">X</span> Aladdin</div>
+            <div><span class="token o">O</span> Genie</div>
+          </div>
+          <div class="actions">
+            <button id="reset">New Round</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules">
+        <h2>How to Play</h2>
+        <p>Aladdin (X) goes first. Line up three symbols to win. If the board fills with no winner, the desert winds call a draw.</p>
+      </section>
+    </main>
+
+    <div class="lamp"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
