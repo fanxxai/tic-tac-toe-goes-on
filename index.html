@@ -40,10 +40,15 @@
 
         <div class="panel">
           <div class="legend">
-            <div><span class="token x">X</span> Aladdin</div>
-            <div><span class="token o">O</span> Genie</div>
+            <div><span class="symbol symbol-x" aria-hidden="true"></span>Aladdin</div>
+            <div><span class="symbol symbol-o" aria-hidden="true"></span>Genie</div>
           </div>
           <div class="actions">
+            <label class="toggle">
+              <input type="checkbox" id="mode" />
+              <span class="track"></span>
+              Vs Genie (CPU)
+            </label>
             <button id="reset">New Round</button>
           </div>
         </div>
@@ -51,7 +56,7 @@
 
       <section class="rules">
         <h2>How to Play</h2>
-        <p>Aladdin (X) goes first. Line up three symbols to win. If the board fills with no winner, the desert winds call a draw.</p>
+        <p>Aladdin (crossed blades) goes first. Line up three symbols to win. If the board fills with no winner, the desert winds call a draw.</p>
       </section>
     </main>
 
