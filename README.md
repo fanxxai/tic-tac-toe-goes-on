@@ -1,15 +1,29 @@
-# Aladdin Tic-Tac-Toe
+# 🎮 Aladdin Tic-Tac-Toe
 
-A jewel-box Tic-Tac-Toe experience set under Agrabah skies. Crafted with a storybook UI, dynamic match flow, and tiny audio cues, this is a modern single‑page game that feels equal parts playful and polished.
+## ✅ What It Is
+- Single-page, storybook Tic-Tac-Toe with match flow, CPU, and audio.
 
-## Highlights
-- Cinematic start screen and match summary flow
-- CPU opponent with `Easy` and `Smart` difficulty
-- Auto-advancing rounds with pause control
-- Live score tracking + round history
-- Subtle SFX + optional ambient music (Web Audio API)
-- Accessible semantic buttons and ARIA labels
+## 🧭 Flow
+- Pick mode on the start screen: `Vs Genie (CPU)` or `2 Players`.
+- Play rounds; first to 3-in-a-row wins a round, full board = draw.
+- Round overlay appears with `Next Round` or `Pause Auto`.
+- End match to view summary + round history; play again or start a new match.
 
+<<<<<<< ours
+## ✨ Features
+- CPU opponent with `Easy` / `Smart` difficulty.
+- Auto-advance rounds (1.5s) with pause control.
+- Live scores, round count, and history list.
+- Music + SFX toggles with Web Audio API.
+
+## 🛠️ Tech
+- HTML + CSS + vanilla JS.
+- Web Audio API for procedural music + SFX.
+- Zero build step, zero dependencies.
+
+## ▶️ Run
+- Open `index.html` in a modern browser.
+=======
 ## Play
 1. Open `index.html` in any modern browser.
 2. Choose a mode: `Vs Genie (CPU)` or `2 Players`.
@@ -23,19 +37,7 @@ A jewel-box Tic-Tac-Toe experience set under Agrabah skies. Crafted with a story
 - `Pause Auto` stops auto-advance between rounds
 - `CPU Difficulty` sets the opponent strength
 - `Music` / `SFX` toggles audio
+>>>>>>> theirs
 
-## Tech
-- HTML + CSS + vanilla JS
-- Web Audio API for procedural music and SFX
-- Zero build step, zero dependencies
-
-## Project Structure
-- `index.html` — layout and UI structure
-- `style.css` — visuals, animation, and theme
-- `script.js` — game logic, audio, and state
-
-## Design Notes
-The interface blends ornamental typography with a high-contrast game surface to keep play clear and fast. Animations emphasize momentum (wins, CPU turns, overlays) without slowing the game loop.
-
-## License
-MIT
+## 📜 License
+- MIT
