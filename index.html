@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Henny+Penny&family=Vollkorn:wght@400;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <div class="backdrop-art" aria-hidden="true"></div>
     <div class="sky">
       <div class="stars"></div>
       <div class="stars s2"></div>
@@ -43,6 +44,7 @@
         </div>
 
         <div class="status" id="status">Player X begins</div>
+        <div class="status-subtle" id="twistHint">Twists: Sands Shift + Djinn Blessing</div>
 
         <div class="board-wrap">
           <div class="board" id="board" aria-label="Tic tac toe board" role="grid">
@@ -104,7 +106,7 @@
 
       <section class="rules">
         <h2>How to Play</h2>
-        <p>Aladdin (crossed blades) goes first. Line up three symbols to win. If the board fills with no winner, the desert winds call a draw.</p>
+        <p>Aladdin (crossed blades) goes first. Line up three symbols to win. Twist 1: each side can hold only 3 marks on the board, so the oldest mark vanishes when a 4th is placed. Twist 2: one blessed tile appears each round; claim it to earn an instant extra turn.</p>
       </section>
     </main>
 

@@ -8,6 +8,7 @@ const roundTagEl = document.getElementById("roundTag");
 const opponentLabelEl = document.getElementById("opponentLabel");
 const legendOpponentEl = document.getElementById("legendOpponent");
 const modeLabelEl = document.getElementById("modeLabel");
+const twistHintEl = document.getElementById("twistHint");
 
 const roundOverlay = document.getElementById("roundOverlay");
 const roundMessageEl = document.getElementById("roundMessage");
@@ -58,6 +59,8 @@ const state = {
   roundActive: false,
   currentPlayer: "X",
   boardState: Array(9).fill(""),
+  markAge: Array(9).fill(0),
+  moveSerial: 0,
   scores: { X: 0, O: 0, draw: 0 },
   round: 1,
   history: [],
@@ -66,6 +69,8 @@ const state = {
   computerThinking: false,
   autoAdvanceTimer: null,
   autoAdvancePaused: false,
+  blessedCell: null,
+  blessedClaimed: false,
 };
 
 const audioState = {
@@ -84,6 +89,11 @@ function opponentName() {
 
 function updateStatus(message) {
   statusEl.textContent = message;
+}
+
+function updateTwistHint(message = "") {
+  if (!twistHintEl) return;
+  twistHintEl.textContent = message;
 }
 
 function updateScoreUI() {
@@ -123,11 +133,67 @@ function checkWinner() {
 
 function clearBoard() {
   state.boardState = Array(9).fill("");
+  state.markAge = Array(9).fill(0);
+  state.moveSerial = 0;
   cells.forEach((cell) => {
     cell.innerHTML = "";
-    cell.classList.remove("taken", "x", "o", "winner", "placed");
+    cell.classList.remove("taken", "x", "o", "winner", "placed", "blessed", "blessed-claimed");
     cell.setAttribute("aria-label", `Cell ${Number(cell.dataset.index) + 1}`);
   });
+}
+
+function updateCellUI(index) {
+  const cell = cells[index];
+  const value = state.boardState[index];
+  cell.classList.remove("blessed", "blessed-claimed");
+  if (index === state.blessedCell && !state.blessedClaimed) {
+    cell.classList.add("blessed");
+  } else if (index === state.blessedCell && state.blessedClaimed && value) {
+    cell.classList.add("blessed-claimed");
+  }
+  cell.innerHTML = value ? renderSymbol(value) : "";
+  cell.classList.remove("taken", "x", "o");
+  if (value) {
+    cell.classList.add("taken", value.toLowerCase());
+    cell.setAttribute("aria-label", `Cell ${index + 1} ${value}`);
+  } else {
+    cell.setAttribute("aria-label", `Cell ${index + 1}`);
+  }
+}
+
+function setupBlessedCell() {
+  state.blessedClaimed = false;
+  state.blessedCell = Math.floor(Math.random() * 9);
+  const cell = cells[state.blessedCell];
+  if (cell) {
+    cell.classList.add("blessed");
+  }
+  updateTwistHint(`Blessed tile: Cell ${state.blessedCell + 1}. Claim it for an extra turn.`);
+}
+
+function countMarks(player) {
+  return state.boardState.filter((cell) => cell === player).length;
+}
+
+function removeOldestMark(player) {
+  let oldestIndex = -1;
+  let oldestAge = Number.POSITIVE_INFINITY;
+
+  state.boardState.forEach((value, index) => {
+    if (value === player && state.markAge[index] < oldestAge) {
+      oldestAge = state.markAge[index];
+      oldestIndex = index;
+    }
+  });
+
+  if (oldestIndex !== -1) {
+    state.boardState[oldestIndex] = "";
+    state.markAge[oldestIndex] = 0;
+    updateCellUI(oldestIndex);
+    return oldestIndex;
+  }
+
+  return -1;
 }
 
 function lockBoard(lock) {
@@ -140,9 +206,10 @@ function startRound() {
   state.computerThinking = false;
   boardCard.classList.remove("cpu-thinking");
   clearBoard();
+  setupBlessedCell();
   lockBoard(false);
   hideRoundOverlay();
-  updateStatus(`${labels.X} begins`);
+  updateStatus(`${labels.X} begins. Sands Shift active (max 3 marks each).`);
   updateScoreUI();
 }
 
@@ -213,8 +280,14 @@ function endRound(result, winningCombo) {
 }
 
 function placeMove(index) {
+  if (countMarks(state.currentPlayer) >= 3) {
+    removeOldestMark(state.currentPlayer);
+  }
+
   const cell = cells[index];
   state.boardState[index] = state.currentPlayer;
+  state.moveSerial += 1;
+  state.markAge[index] = state.moveSerial;
   cell.innerHTML = renderSymbol(state.currentPlayer);
   cell.classList.add("taken", state.currentPlayer.toLowerCase(), "placed");
   cell.setAttribute("aria-label", `Cell ${index + 1} ${state.currentPlayer}`);
@@ -227,12 +300,20 @@ function placeMove(index) {
     return true;
   }
 
-  if (state.boardState.every(Boolean)) {
-    endRound("draw", null);
-    return true;
+  const claimedBlessing = !state.blessedClaimed && index === state.blessedCell;
+  if (claimedBlessing) {
+    state.blessedClaimed = true;
+    cell.classList.remove("blessed");
+    cell.classList.add("blessed-claimed");
+    updateTwistHint(`${labels[state.currentPlayer]} claimed Djinn Blessing and plays again.`);
+    updateStatus(`${labels[state.currentPlayer]} claimed Djinn Blessing. Extra turn!`);
+    return false;
   }
 
   state.currentPlayer = state.currentPlayer === "X" ? "O" : "X";
+  if (!state.blessedClaimed && state.blessedCell !== null) {
+    updateTwistHint(`Blessed tile still open: Cell ${state.blessedCell + 1}.`);
+  }
   updateStatus(`${labels[state.currentPlayer]}'s turn`);
   return false;
 }
@@ -269,6 +350,12 @@ function findWinningMove(player) {
 }
 
 function chooseComputerMove() {
+  if (!state.blessedClaimed && state.blessedCell !== null && !state.boardState[state.blessedCell]) {
+    if (state.difficulty === "smart" || Math.random() < 0.45) {
+      return state.blessedCell;
+    }
+  }
+
   if (state.difficulty === "easy") {
     const open = getAvailableMoves();
     return open[Math.floor(Math.random() * open.length)];
@@ -310,6 +397,11 @@ function triggerComputerMove() {
 
     if (roundEnded) {
       lockBoard(true);
+      return;
+    }
+
+    if (state.mode === "cpu" && state.currentPlayer === "O") {
+      triggerComputerMove();
       return;
     }
 
@@ -582,5 +674,6 @@ document.body.addEventListener("pointerdown", () => {
 updateLabels();
 updateScoreUI();
 updateStatus("Choose a match to begin.");
+updateTwistHint("Twists: Sands Shift + Djinn Blessing");
 startScreen.hidden = false;
 summaryScreen.hidden = true;
