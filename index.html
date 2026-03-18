@@ -3,43 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Aladdin Tic-Tac-Toe</title>
+    <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Henny+Penny&family=Vollkorn:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div class="backdrop-art" aria-hidden="true"></div>
-    <div class="sky">
-      <div class="stars"></div>
-      <div class="stars s2"></div>
-      <div class="stars s3"></div>
-    </div>
-
     <main class="page">
       <header class="hero">
-        <div class="hero-badge">Agrabah Nights</div>
-        <h1>Aladdin Tic-Tac-Toe</h1>
-        <p class="subtitle">Choose your magic, claim the grid.</p>
+        <div class="hero-badge">Tic-Tac-Toe</div>
+        <h1>Grid Strategy</h1>
+        <p class="subtitle">minimal / mono / strategic</p>
       </header>
 
       <section class="board-card">
         <div class="scorebar">
-          <div class="score-item">
-            <span class="token x">X</span>
-            <span class="label">Aladdin</span>
-            <span class="score" id="scoreX">0</span>
-          </div>
+            <div class="score-item">
+              <span class="token x">X</span>
+              <span class="label">Player X</span>
+              <span class="score" id="scoreX">0</span>
+            </div>
           <div class="score-item center">
             <span class="label">Draws</span>
             <span class="score" id="scoreDraw">0</span>
           </div>
-          <div class="score-item">
-            <span class="token o">O</span>
-            <span class="label" id="opponentLabel">Genie</span>
-            <span class="score" id="scoreO">0</span>
-          </div>
+            <div class="score-item">
+              <span class="token o">O</span>
+              <span class="label" id="opponentLabel">Player O</span>
+              <span class="score" id="scoreO">0</span>
+            </div>
           <div class="round-tag" id="roundTag">Round 1</div>
         </div>
 
@@ -73,8 +66,8 @@
 
         <div class="panel">
           <div class="legend">
-            <div><span class="symbol symbol-x" aria-hidden="true"></span>Aladdin</div>
-            <div><span class="symbol symbol-o" aria-hidden="true"></span><span id="legendOpponent">Genie</span></div>
+            <div><span class="symbol symbol-x" aria-hidden="true"></span>Player X</div>
+            <div><span class="symbol symbol-o" aria-hidden="true"></span><span id="legendOpponent">Player O</span></div>
           </div>
           <div class="actions">
             <button id="restartRound">Restart Round</button>
@@ -82,7 +75,7 @@
             <button class="ghost" id="endMatch">End Match</button>
           </div>
           <div class="settings">
-            <div class="mode-pill" id="modeLabel">Mode: Vs Genie (CPU)</div>
+            <div class="mode-pill" id="modeLabel">Mode: vs Computer</div>
             <label class="select">
               <span>CPU Difficulty</span>
               <select id="cpuDifficulty">
@@ -106,17 +99,17 @@
 
       <section class="rules">
         <h2>How to Play</h2>
-        <p>Aladdin (crossed blades) goes first. Line up three symbols to win. Twist 1: each side can hold only 3 marks on the board, so the oldest mark vanishes when a 4th is placed. Twist 2: one blessed tile appears each round; claim it to earn an instant extra turn.</p>
+        <p>Player X goes first. Align three symbols in a row to win. Twist 1: each side can hold only 3 marks on the board, so the oldest mark vanishes when a 4th is placed. Twist 2: one blessed tile appears each round; claim it to earn an instant extra turn.</p>
       </section>
     </main>
 
     <div class="screen start-screen" id="startScreen" aria-modal="true" role="dialog">
       <div class="screen-card">
         <div class="hero-badge">Match Portal</div>
-        <h2>Choose Your Match</h2>
-        <p>Pick a mode to begin your continuous showdown. You can switch modes only after a match ends.</p>
-        <div class="screen-actions">
-          <button class="primary" data-mode="cpu">Vs Genie (CPU)</button>
+        <h2>Select Mode</h2>
+        <p>Begin a continuous showdown. You can switch modes only after a match ends.</p>
+          <div class="screen-actions">
+          <button class="primary" data-mode="cpu">vs Computer</button>
           <button class="ghost" data-mode="pvp">2 Players</button>
         </div>
       </div>
@@ -125,18 +118,18 @@
     <div class="screen summary-screen" id="summaryScreen" aria-modal="true" role="dialog" hidden>
       <div class="screen-card">
         <div class="hero-badge">Match Summary</div>
-        <h2 id="summaryTitle">Match Complete</h2>
+        <h2 id="summaryTitle">Complete</h2>
         <div class="summary-grid">
           <div class="summary-stat">
             <span class="label">Total Rounds</span>
             <span class="value" id="summaryRounds">0</span>
           </div>
           <div class="summary-stat">
-            <span class="label">Aladdin (X)</span>
+            <span class="label">Player X</span>
             <span class="value" id="summaryX">0</span>
           </div>
           <div class="summary-stat">
-            <span class="label" id="summaryOpponentLabel">Genie (O)</span>
+            <span class="label" id="summaryOpponentLabel">Player O</span>
             <span class="value" id="summaryO">0</span>
           </div>
           <div class="summary-stat">
@@ -155,7 +148,7 @@
       </div>
     </div>
 
-    <div class="lamp"></div>
+
     <script src="script.js"></script>
   </body>
 </html>
