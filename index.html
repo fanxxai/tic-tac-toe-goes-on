@@ -73,6 +73,7 @@
             <button id="restartRound">Restart Round</button>
             <button class="ghost" id="resetMatch">Reset Match</button>
             <button class="ghost" id="endMatch">End Match</button>
+            <button id="helpBtn" class="ghost" aria-label="Help">Help</button>
           </div>
           <div class="settings">
             <div class="mode-pill" id="modeLabel">Mode: vs Computer</div>
@@ -97,10 +98,7 @@
         </div>
       </section>
 
-      <section class="rules">
-        <h2>How to Play</h2>
-        <p>Player X goes first. Align three symbols in a row to win. Twist 1: each side can hold only 3 marks on the board, so the oldest mark vanishes when a 4th is placed. Twist 2: one blessed tile appears each round; claim it to earn an instant extra turn.</p>
-      </section>
+      
     </main>
 
     <div class="screen start-screen" id="startScreen" aria-modal="true" role="dialog">
@@ -148,7 +146,40 @@
       </div>
     </div>
 
+    <div class="screen" id="helpScreen" aria-modal="true" role="dialog" hidden tabindex="-1">
+      <div class="screen-card" style="max-width:420px;">
+        <div class="hero-badge">Help</div>
+        <h2>Twist Rules</h2>
+        <p><strong>Sands Shift</strong> — 3 marks max per player. A 4th placement erases your oldest mark.<br><strong>Djinn Blessing</strong> — one tile glows each round. Claiming it grants an instant extra turn.<br>First to 3-in-a-row wins the round. Align and outmaneuver.</p>
+        <div class="screen-actions">
+          <button id="closeHelp" class="ghost">Close</button>
+        </div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
+
+    <div class="stars" aria-hidden="true">
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+    </div>
   </body>
 </html>

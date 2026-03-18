@@ -42,6 +42,86 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Background image layer (monochrome) */
+/* Uses a fullscreen fixed layer behind content to preserve readability */
+body {
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('output/imagegen/agrabah-bg.png') center/cover no-repeat;
+  filter: grayscale(1) brightness(0.35);
+  z-index: -2;
+  will-change: transform;
+}
+
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  margin: auto;
+  width: 90vw;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.star {
+  position: relative;
+  width: 1px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.star::after {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 15vh;
+  width: 100%;
+  top: -50%;
+  left: 0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 75%, rgba(255, 255, 255, 0.5) 100%);
+  animation: drop 7s 0s infinite;
+  animation-fill-mode: forwards;
+  animation-timing-function: cubic-bezier(0.4, 0.26, 0, 0.97);
+  opacity: 0.5;
+}
+
+.star:nth-child(1)::after { animation-delay: 0.5s; }
+.star:nth-child(2)::after { animation-delay: 1s; }
+.star:nth-child(3)::after { animation-delay: 1.5s; }
+.star:nth-child(4)::after { animation-delay: 2s; }
+.star:nth-child(5)::after { animation-delay: 2.5s; }
+.star:nth-child(6)::after { animation-delay: 3s; }
+.star:nth-child(7)::after { animation-delay: 3.5s; }
+.star:nth-child(8)::after { animation-delay: 4s; }
+.star:nth-child(9)::after { animation-delay: 4.5s; }
+.star:nth-child(10)::after { animation-delay: 5s; }
+.star:nth-child(11)::after { animation-delay: 0.3s; }
+.star:nth-child(12)::after { animation-delay: 0.8s; }
+.star:nth-child(13)::after { animation-delay: 1.3s; }
+.star:nth-child(14)::after { animation-delay: 1.8s; }
+.star:nth-child(15)::after { animation-delay: 2.3s; }
+.star:nth-child(16)::after { animation-delay: 2.8s; }
+.star:nth-child(17)::after { animation-delay: 3.3s; }
+.star:nth-child(18)::after { animation-delay: 3.8s; }
+.star:nth-child(19)::after { animation-delay: 4.3s; }
+.star:nth-child(20)::after { animation-delay: 4.8s; }
+
+@keyframes drop {
+  0% { top: -50%; }
+  100% { top: 110%; }
+}
+
 .page {
   padding: 12px;
   padding-top: calc(12px + var(--safe-top));
@@ -57,15 +137,16 @@ body {
 @media (min-width: 900px) {
   .page {
     display: grid;
-    grid-template-columns: 240px 500px;
+    grid-template-columns: 1fr;
     grid-template-areas:
-      "header header"
-      "rules board";
-    justify-content: center;
+      "header"
+      "rules"
+      "board";
     gap: 24px;
     padding: 24px;
     max-width: 1000px;
     margin: 0 auto;
+    justify-items: center;
   }
   .hero { grid-area: header; }
   .board-card { grid-area: board; }
@@ -74,6 +155,32 @@ body {
 
 .hero {
   text-align: center;
+  /* keep header flow; help button now placed in bottom actions */
+}
+
+.help-btn {
+  /* inline button for bottom placement; no absolute positioning */
+  position: static;
+  margin-left: auto;
+  margin-right: auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: var(--stroke);
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.help-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .hero h1 {

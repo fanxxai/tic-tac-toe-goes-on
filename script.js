@@ -10,6 +10,11 @@ const legendOpponentEl = document.getElementById("legendOpponent");
 const modeLabelEl = document.getElementById("modeLabel");
 const twistHintEl = document.getElementById("twistHint");
 
+// Help modal controls
+const helpBtn = document.getElementById("helpBtn");
+const helpScreen = document.getElementById("helpScreen");
+const closeHelpBtn = document.getElementById("closeHelp");
+
 const roundOverlay = document.getElementById("roundOverlay");
 const roundMessageEl = document.getElementById("roundMessage");
 const roundResultEl = document.getElementById("roundResult");
@@ -555,40 +560,56 @@ function startMusic() {
   }
 
   const gain = ctx.createGain();
-  gain.gain.value = 0.05;
+  gain.gain.value = 0.04;
   gain.connect(ctx.destination);
   audioState.musicGain = gain;
 
   const osc1 = ctx.createOscillator();
   const osc2 = ctx.createOscillator();
   const osc3 = ctx.createOscillator();
-  osc1.type = "sine";
-  osc2.type = "triangle";
-  osc3.type = "sine";
+  const osc4 = ctx.createOscillator();
+  const oscTypes = ["sine", "triangle", "sawtooth", "square"];
+  osc1.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+  osc2.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+  osc3.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+  osc4.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
   osc1.connect(gain);
   osc2.connect(gain);
   osc3.connect(gain);
+  osc4.connect(gain);
   osc1.start();
   osc2.start();
   osc3.start();
-  audioState.musicOscillators = [osc1, osc2, osc3];
+  osc4.start();
+  audioState.musicOscillators = [osc1, osc2, osc3, osc4];
 
-  const progression = [
-    [220, 277, 330],
-    [196, 247, 294],
-    [174, 220, 262],
-    [196, 247, 294],
+  const progressions = [
+    [[220, 277, 330, 440], [196, 247, 294, 392], [174, 220, 262, 349], [196, 247, 294, 392]],
+    [[262, 330, 392, 523], [220, 277, 330, 440], [196, 247, 294, 392], [247, 311, 370, 494]],
+    [[294, 370, 440, 587], [262, 330, 392, 523], [247, 311, 370, 494], [220, 277, 330, 440]],
+    [[330, 415, 494, 659], [294, 370, 440, 587], [262, 330, 392, 523], [294, 370, 440, 587]],
+    [[196, 247, 294, 392], [220, 277, 330, 440], [174, 220, 262, 349], [196, 247, 294, 392]],
   ];
+  let currentProgression = progressions[Math.floor(Math.random() * progressions.length)];
   let step = 0;
+
   const setChord = () => {
-    const chord = progression[step];
-    osc1.frequency.setTargetAtTime(chord[0], ctx.currentTime, 0.2);
-    osc2.frequency.setTargetAtTime(chord[1], ctx.currentTime, 0.2);
-    osc3.frequency.setTargetAtTime(chord[2], ctx.currentTime, 0.2);
-    step = (step + 1) % progression.length;
+    const chord = currentProgression[step];
+    osc1.frequency.setTargetAtTime(chord[0] * (1 + Math.random() * 0.02), ctx.currentTime, 0.15);
+    osc2.frequency.setTargetAtTime(chord[1] * (1 + Math.random() * 0.02), ctx.currentTime, 0.15);
+    osc3.frequency.setTargetAtTime(chord[2] * (1 + Math.random() * 0.02), ctx.currentTime, 0.15);
+    osc4.frequency.setTargetAtTime(chord[3] * (1 + Math.random() * 0.02), ctx.currentTime, 0.15);
+    step = (step + 1) % currentProgression.length;
+    if (step === 0 && Math.random() > 0.6) {
+      currentProgression = progressions[Math.floor(Math.random() * progressions.length)];
+      osc1.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+      osc2.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+      osc3.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+      osc4.type = oscTypes[Math.floor(Math.random() * oscTypes.length)];
+    }
   };
   setChord();
-  audioState.musicTimer = window.setInterval(setChord, 2000);
+  audioState.musicTimer = window.setInterval(setChord, 600 + Math.random() * 400);
 }
 
 function stopMusic() {
@@ -677,3 +698,23 @@ updateStatus("Choose a match to begin.");
 updateTwistHint("Twists: Sands Shift + Djinn Blessing");
 startScreen.hidden = false;
 summaryScreen.hidden = true;
+
+// Help modal interactions
+if (helpBtn && helpScreen && closeHelpBtn) {
+  helpBtn.addEventListener("click", () => {
+    helpScreen.hidden = false;
+    // focus the modal for accessibility
+    helpScreen.focus?.();
+  });
+  closeHelpBtn.addEventListener("click", () => {
+    helpScreen.hidden = true;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !helpScreen.hidden) {
+      helpScreen.hidden = true;
+    }
+  });
+  helpScreen.addEventListener("click", (e) => {
+    if (e.target === helpScreen) helpScreen.hidden = true;
+  });
+}
